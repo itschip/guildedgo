@@ -7,13 +7,20 @@ import (
 	"github.com/itschip/guildedgo/internal/endpoints"
 )
 
-type Channel struct {
+type ChannelService interface {
+	SendChannelMessage(channelId string, message *MessageObject) (*Message, error)
 }
 
-func (c *Client) SendChannelMessage(channelId string, message *MessageObject) (*Message, error) {
+type channelService struct {
+	client *Client
+}
+
+var _ ChannelService = &channelService{}
+
+func (cs *channelService) SendChannelMessage(channelId string, message *MessageObject) (*Message, error) {
 	endpoint := endpoints.CreateMessageEndpoint(channelId)
 
-	resp, err := c.PostRequest(endpoint, &message)
+	resp, err := cs.client.PostRequest(endpoint, &message)
 	if err != nil {
 		return nil, err
 	}

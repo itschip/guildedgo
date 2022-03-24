@@ -15,14 +15,14 @@ func TestNewClient(t *testing.T) {
 		Token: token,
 	}
 
-	c := New(config)
+	c := NewClient(config)
 
 	message := &MessageObject{
 		Content: "Hello Everyone!!",
 	}
 
 	// wew, it works
-	msg, err := c.SendChannelMessage("08dfae9c-6ecb-44b7-86ad-6812b495dd0c", message)
+	msg, err := c.Channel.SendChannelMessage("08dfae9c-6ecb-44b7-86ad-6812b495dd0c", message)
 	if err != nil {
 		log.Println(err.Error())
 	}
