@@ -39,10 +39,31 @@ type Message struct {
 	UpdatedAt string `json:"updatedAt"`
 }
 
+type ChannelMessage struct {
+	Id        string `json:"id"`
+	Type      string `json:"type"`
+	ServerId  string `json:"serverId"`
+	ChannelId string `json:"channelId"`
+	Content   string `json:"content"`
+	CreatedAt string `json:"createdAt"`
+	CreatedBy string `json:"createdBy"`
+}
+
 type MessageObject struct {
 	Content string `json:"content"`
 }
 
-type MessageReponse struct {
+type MessageResponse struct {
 	Message Message `json:"message"`
+}
+
+type GetMessageObject struct {
+	Before         string `json:"before"`
+	After          string `json:"after"`
+	Limit          int    `json:"limit"`
+	IncludePrivate bool   `json:"includePrivate"`
+}
+
+type AllMessagesResponse struct {
+	Messages []ChannelMessage `json:"messages"`
 }
