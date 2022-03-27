@@ -10,6 +10,7 @@ import (
 
 func TestNewClient(t *testing.T) {
 	token := utils.GoDotEnvVariable("BOT_TOKEN")
+	channelId := utils.GoDotEnvVariable("TEST_CHANNEL_ID")
 
 	config := &Config{
 		Token: token,
@@ -21,14 +22,14 @@ func TestNewClient(t *testing.T) {
 		Content: "Hello Everyone!!",
 	}
 
-	msg, err := c.Channel.SendMessage("08dfae9c-6ecb-44b7-86ad-6812b495dd0c", message)
+	msg, err := c.Channel.SendMessage(channelId, message)
 	if err != nil {
 		log.Println(err.Error())
 	}
 
 	fmt.Println(msg.Id)
 
-	messages, err := c.Channel.GetMessages("08dfae9c-6ecb-44b7-86ad-6812b495dd0c", nil)
+	messages, err := c.Channel.GetMessages(channelId, nil)
 	if err != nil {
 		log.Println(err.Error())
 	}
