@@ -9,6 +9,7 @@ import (
 type ChannelService interface {
 	SendMessage(channelId string, message *MessageObject) (*ChatMessage, error)
 	GetMessages(channelId string, getObject *GetMessagesObject) (*[]ChannelMessage, error)
+	GetMessage(channelId string, messageId string) (*ChatMessage, error)
 }
 
 type channelService struct {
@@ -53,7 +54,7 @@ func (cs *channelService) GetMessages(channelId string, getObject *GetMessagesOb
 }
 
 // GetMessage Get a message from a channel
-func (cs *channelService) GetMessage(channelId string, messageId string) (*ChannelMessage, error) {
+func (cs *channelService) GetMessage(channelId string, messageId string) (*ChatMessage, error) {
 	endpoint := endpoints.GetChannelMessageEndpoint(channelId, messageId)
 	
 	resp, err := cs.client.GetRequest(endpoint)
@@ -61,7 +62,7 @@ func (cs *channelService) GetMessage(channelId string, messageId string) (*Chann
 		return nil, err
 	}
 	
-	var msg GetMessageResponse
+	var msg MessageResponse
 	err = json.Unmarshal(resp, &msg)
 	if err != nil {
 		return nil, err
