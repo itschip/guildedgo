@@ -2,13 +2,13 @@ package guildedgo
 
 import (
 	"encoding/json"
-
+	
 	"github.com/itschip/guildedgo/internal/endpoints"
 )
 
 type ChannelService interface {
-	SendMessage(channelId string, message *MessageObject) (*Message, error)
-	GetMessages(channelId string, getObject *GetMessageObject) (*[]ChannelMessage, error)
+	SendMessage(channelId string, message *MessageObject) (*ChatMessage, error)
+	GetMessages(channelId string, getObject *GetMessagesObject) (*[]ChannelMessage, error)
 }
 
 type channelService struct {
@@ -17,36 +17,55 @@ type channelService struct {
 
 var _ ChannelService = &channelService{}
 
-func (cs *channelService) SendMessage(channelId string, message *MessageObject) (*Message, error) {
+func (cs *channelService) SendMessage(channelId string, message *MessageObject) (*ChatMessage, error) {
 	endpoint := endpoints.CreateMessageEndpoint(channelId)
-
+	
 	resp, err := cs.client.PostRequest(endpoint, &message)
 	if err != nil {
 		return nil, err
 	}
-
+	
 	var msg MessageResponse
 	err = json.Unmarshal(resp, &msg)
 	if err != nil {
 		return nil, err
 	}
-
+	
 	return &msg.Message, err
 }
 
-func (cs *channelService) GetMessages(channelId string, getObject *GetMessageObject) (*[]ChannelMessage, error) {
+// GetMessages TODO: add support for params
+func (cs *channelService) GetMessages(channelId string, getObject *GetMessagesObject) (*[]ChannelMessage, error) {
 	endpoint := endpoints.GetChannelMessagesEndpoint(channelId)
-
-	resp, err := cs.client.GetRequest(endpoint, nil)
+	
+	resp, err := cs.client.GetRequest(endpoint)
 	if err != nil {
 		return nil, err
 	}
-
+	
 	var msgs AllMessagesResponse
 	err = json.Unmarshal(resp, &msgs)
 	if err != nil {
 		return nil, err
 	}
-
+	
 	return &msgs.Messages, nil
+}
+
+// GetMessage Get a message from a channel
+func (cs *channelService) GetMessage(channelId string, messageId string) (*ChannelMessage, error) {
+	endpoint := endpoints.GetChannelMessageEndpoint(channelId, messageId)
+	
+	resp, err := cs.client.GetRequest(endpoint)
+	if err != nil {
+		return nil, err
+	}
+	
+	var msg GetMessageResponse
+	err = json.Unmarshal(resp, &msg)
+	if err != nil {
+		return nil, err
+	}
+	
+	return &msg.Message, nil
 }

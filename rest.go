@@ -18,7 +18,7 @@ func (c *Client) PostRequest(endpoint string, body interface{}) ([]byte, error) 
 	return resp, nil
 }
 
-func (c *Client) GetRequest(endpoint string, body interface{}) ([]byte, error) {
+func (c *Client) GetRequest(endpoint string) ([]byte, error) {
 	resp, err := internal.DoRequest("GET", endpoint, nil, c.Token)
 
 	if err != nil {
