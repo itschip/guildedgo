@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 	"testing"
-
+	
 	"github.com/itschip/guildedgo/utils"
 )
 
@@ -26,13 +26,13 @@ func TestNewClient(t *testing.T) {
 	if err != nil {
 		log.Println(err.Error())
 	}
-
-	fmt.Println(msg.Id)
-
-	messages, err := c.Channel.GetMessages(channelId, nil)
-	if err != nil {
-		log.Println(err.Error())
+	fmt.Println(msg.Id, msg.ChannelId)
+	
+	newMessage := &MessageObject{
+		Content: "Bye Everyone!!",
 	}
-
-	fmt.Println((*messages)[0].Content)
+	
+	newMsg,_ := c.Channel.UpdateChannelMessage(msg.ChannelId, msg.Id, newMessage)
+	
+	fmt.Println(newMsg.Id)
 }

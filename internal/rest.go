@@ -11,7 +11,7 @@ func DoRequest(method string, endpoint string, body []byte, token string) ([]byt
 	request.Header.Set("Authorization", "Bearer "+token)
 	request.Header.Set("Content-Type", "application/json")
 
-	resp, err := Do(request)
+	resp, err := do(request)
 	if err != nil {
 		return nil, err
 	}
@@ -19,7 +19,7 @@ func DoRequest(method string, endpoint string, body []byte, token string) ([]byt
 	return resp, nil
 }
 
-func Do(req *http.Request) ([]byte, error) {
+func do(req *http.Request) ([]byte, error) {
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
 		return nil, err

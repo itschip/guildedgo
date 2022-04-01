@@ -14,4 +14,7 @@ var (
 	GetChannelMessageEndpoint = func(channelId string, messageId string) string {
 		return internal.GuildedApi + "/channels/" + channelId + "/messages/" + messageId
 	}
+	UpdateChannelMessageEndpoint = func(channelId string, messageId string) string {
+		return internal.GuildedApi + "/channels/" + channelId + "/messages/" + messageId
+	}
 )

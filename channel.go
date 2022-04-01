@@ -2,6 +2,7 @@ package guildedgo
 
 import (
 	"encoding/json"
+	"fmt"
 	
 	"github.com/itschip/guildedgo/internal/endpoints"
 )
@@ -10,6 +11,7 @@ type ChannelService interface {
 	SendMessage(channelId string, message *MessageObject) (*ChatMessage, error)
 	GetMessages(channelId string, getObject *GetMessagesObject) (*[]ChannelMessage, error)
 	GetMessage(channelId string, messageId string) (*ChatMessage, error)
+	UpdateChannelMessage(channelId string, messageId string, newMessage *MessageObject) (*ChatMessage, error)
 }
 
 type channelService struct {
@@ -35,6 +37,24 @@ func (cs *channelService) SendMessage(channelId string, message *MessageObject) 
 	return &msg.Message, err
 }
 
+func (cs *channelService) UpdateChannelMessage(channelId string, messageId string, newMessage *MessageObject) (*ChatMessage, error) {
+	endpoint := endpoints.UpdateChannelMessageEndpoint(channelId, messageId)
+	
+	resp, err := cs.client.PutRequest(endpoint, &newMessage)
+	if err != nil {
+		return nil, err
+	}
+	
+	var msg MessageResponse
+	err = json.Unmarshal(resp, &msg)
+	if err != nil {
+		return nil, err
+	}
+	
+	fmt.Println(msg)
+	return &msg.Message, err
+}
+
 // GetMessages TODO: add support for params
 func (cs *channelService) GetMessages(channelId string, getObject *GetMessagesObject) (*[]ChannelMessage, error) {
 	endpoint := endpoints.GetChannelMessagesEndpoint(channelId)
@@ -44,6 +64,7 @@ func (cs *channelService) GetMessages(channelId string, getObject *GetMessagesOb
 		return nil, err
 	}
 	
+	// Abstract this functionality in GetRequest, as for the rest below and above
 	var msgs AllMessagesResponse
 	err = json.Unmarshal(resp, &msgs)
 	if err != nil {
