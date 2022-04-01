@@ -35,4 +35,9 @@ func TestNewClient(t *testing.T) {
 	newMsg,_ := c.Channel.UpdateChannelMessage(msg.ChannelId, msg.Id, newMessage)
 	
 	fmt.Println(newMsg.Id)
+	
+	err = c.Channel.DeleteChannelMessage(newMsg.ChannelId, newMsg.Id)
+	if err != nil {
+		log.Println(err.Error())
+	}
 }

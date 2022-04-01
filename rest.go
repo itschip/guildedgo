@@ -39,3 +39,13 @@ func (c *Client) PutRequest(endpoint string, body interface{}) ([]byte, error) {
 	
 	return resp, nil
 }
+
+func (c *Client) DeleteRequest(endpoint string) ([]byte, error) {
+	resp, err := internal.DoRequest("DELETE", endpoint, nil, c.Token)
+	
+	if err != nil {
+		return nil, err
+	}
+	
+	return resp, nil
+}

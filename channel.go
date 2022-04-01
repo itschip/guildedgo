@@ -12,6 +12,7 @@ type ChannelService interface {
 	GetMessages(channelId string, getObject *GetMessagesObject) (*[]ChannelMessage, error)
 	GetMessage(channelId string, messageId string) (*ChatMessage, error)
 	UpdateChannelMessage(channelId string, messageId string, newMessage *MessageObject) (*ChatMessage, error)
+	DeleteChannelMessage(channelId string, messageId string) error
 }
 
 type channelService struct {
@@ -90,4 +91,15 @@ func (cs *channelService) GetMessage(channelId string, messageId string) (*ChatM
 	}
 	
 	return &msg.Message, nil
+}
+
+func (cs *channelService) DeleteChannelMessage(channelId string, messageId string) error {
+	endpoint := endpoints.GetChannelMessageEndpoint(channelId, messageId)
+	
+	_, err := cs.client.DeleteRequest(endpoint)
+	if err != nil {
+		return err
+	}
+	
+	return nil
 }
