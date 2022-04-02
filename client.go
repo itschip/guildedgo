@@ -7,6 +7,7 @@ type Client struct {
 	client *http.Client
 
 	Channel ChannelService
+	Members MembersService
 }
 
 type Config struct {
@@ -20,6 +21,7 @@ func NewClient(config *Config) *Client {
 	}
 
 	c.Channel = &channelService{client: c}
+	c.Members = &membersService{client: c}
 
 	return c
 }
