@@ -62,7 +62,6 @@ type membersService struct {
 
 var _ MembersService = &membersService{}
 
-// TODO: Fix some forbidden error
 func (ms *membersService) UpdateMemberNickname(userId string, nickname string) (*NicknameResponse, error) {
 	endpoint := endpoints.UpdateMemberNicknameEndpoint(ms.client.ServerID, userId)
 
@@ -118,4 +117,23 @@ func (ms *membersService) KickMember(userId string) error {
 	}
 
 	return nil
+}
+
+func (ms *membersService) GetServerMembers() (*[]ServerMemberSummary, error) {
+	endpoint := endpoints.MemberEndpoint(ms.client.ServerID)
+	
+	resp, err := ms.client.GetRequest(endpoint)
+	if err != nil {
+		log.Fatalln(err.Error())
+		return nil, err
+	}
+	
+	var members []ServerMemberSummary
+	err = json.Unmarshal(resp, &members)
+	if err != nil {
+		log.Fatalln(err.Error())
+		return nil, err
+	}
+	
+	return &members, nil
 }
