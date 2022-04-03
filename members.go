@@ -3,7 +3,7 @@ package guildedgo
 import (
 	"encoding/json"
 	"log"
-
+	
 	"github.com/itschip/guildedgo/internal/endpoints"
 )
 
@@ -51,8 +51,9 @@ type ServerMemberResponse struct {
 }
 
 type MembersService interface {
-	UpdateMemberNickname(serverId string, userId string, nickname string) (*NicknameResponse, error)
+	UpdateMemberNickname(userId string, nickname string) (*NicknameResponse, error)
 	GetServerMember(serverId string, userId string) (*ServerMember, error)
+	KickMember(userId string) error
 }
 
 type membersService struct {
@@ -62,8 +63,8 @@ type membersService struct {
 var _ MembersService = &membersService{}
 
 // TODO: Fix some forbidden error
-func (ms *membersService) UpdateMemberNickname(serverId string, userId string, nickname string) (*NicknameResponse, error) {
-	endpoint := endpoints.UpdateMemberNicknameEndpoint(serverId, userId)
+func (ms *membersService) UpdateMemberNickname(userId string, nickname string) (*NicknameResponse, error) {
+	endpoint := endpoints.UpdateMemberNicknameEndpoint(ms.client.ServerID, userId)
 
 	body := &NicknameResponse{
 		Nickname: nickname,
@@ -104,4 +105,17 @@ func (ms *membersService) GetServerMember(serverId string, userId string) (*Serv
 	}
 
 	return &member.Member, nil
+}
+
+func (ms *membersService) KickMember(userId string) error {
+	endpoint := endpoints.ServerMemberEndpoint(ms.client.ServerID, userId)
+
+	// No response. Maybe ther'e be one in the future
+	_, err := ms.client.DeleteRequest(endpoint)
+	if err != nil {
+		log.Fatalln(err.Error())
+		return err
+	}
+
+	return nil
 }

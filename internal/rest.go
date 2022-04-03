@@ -11,6 +11,7 @@ func DoRequest(method string, endpoint string, body []byte, token string) ([]byt
 	request.Header.Set("Authorization", "Bearer "+token)
 	request.Header.Set("Content-Type", "application/json")
 
+	// Handle status codes - remember rate limiting
 	resp, err := do(request)
 	if err != nil {
 		return nil, err
