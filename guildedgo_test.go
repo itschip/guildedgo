@@ -1,6 +1,7 @@
 package guildedgo
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/itschip/guildedgo/utils"
@@ -10,11 +11,14 @@ func TestNewClient(t *testing.T) {
 	token := utils.GoDotEnvVariable("BOT_TOKEN")
 
 	config := &Config{
-		ServerID: "gRG4yLYl",
+		ServerID: "",
 		Token:    token,
 	}
 
 	c := NewClient(config)
 
-	_ = c.Members.KickMember("dKR1a6e4")
+	_, err := c.Members.UpdateMemberNickname("", "")
+	if err != nil {
+		fmt.Println("Uh oh")
+	}
 }
