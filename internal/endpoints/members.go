@@ -12,4 +12,7 @@ var (
 	UpdateMemberNicknameEndpoint = func(serverId string, userId string) string {
 		return ServerMemberEndpoint(serverId, userId) + "/nickname"
 	}
+	MemberBanEndpoint = func(serverId string, userId string) string {
+		return internal.GuildedApi + "/servers/" + serverId + "/bans/" + userId
+	}
 )

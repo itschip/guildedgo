@@ -119,6 +119,62 @@ func (ms *membersService) KickMember(userId string) error {
 	return nil
 }
 
+func (ms *membersService) BanMember(userId string, reason string) (*ServerMemberBan, error) {
+	endpoint := endpoints.MemberBanEndpoint(ms.client.ServerID, userId)
+	
+	// No need to build a struct here
+	body := map[string]string{
+		"reason": reason,
+	}
+	
+	resp, err := ms.client.PostRequest(endpoint, body)
+	if err != nil {
+		log.Fatalln(err.Error())
+		return nil, err
+	}
+	
+	var ban ServerMemberBan
+	err = json.Unmarshal(resp, &ban)
+	if err != nil {
+		log.Fatalln(err.Error())
+		return nil, err
+	}
+	
+	return &ban, nil
+}
+
+func (ms *membersService) IsMemberBanned(userId string) (*ServerMemberBan, error) {
+	// Do we want to use the serverID from the config, or manually input it?
+	endpoint := endpoints.ServerMemberEndpoint(ms.client.ServerID, userId)
+	
+	resp, err := ms.client.GetRequest(endpoint)
+	if err != nil {
+		log.Fatalln(err.Error())
+		return nil, err
+	}
+	
+	var ban ServerMemberBan
+	err = json.Unmarshal(resp, &ban)
+	if err != nil {
+		log.Fatalln(err.Error())
+		return nil, err
+	}
+	
+	return &ban, nil
+}
+
+func (ms *membersService) UnbanMember(userId string) error {
+	endpoint := endpoints.MemberBanEndpoint(ms.client.ServerID, userId)
+	
+	_, err := ms.client.DeleteRequest(endpoint)
+	if err != nil {
+		log.Fatalln(err.Error())
+		return err
+	}
+	
+	return nil
+}
+
 func (ms *membersService) GetServerMembers() (*[]ServerMemberSummary, error) {
 	endpoint := endpoints.MemberEndpoint(ms.client.ServerID)
 	
