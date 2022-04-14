@@ -1,9 +1,8 @@
 package guildedgo
 
 import (
-	"fmt"
 	"testing"
-
+	
 	"github.com/itschip/guildedgo/utils"
 )
 
@@ -16,9 +15,6 @@ func TestNewClient(t *testing.T) {
 	}
 
 	c := NewClient(config)
-
-	_, err := c.Members.UpdateMemberNickname("", "")
-	if err != nil {
-		fmt.Println("Uh oh")
-	}
+	
+	c.Open()
 }
