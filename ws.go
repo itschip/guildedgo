@@ -14,7 +14,6 @@ var (
 	space   = []byte{' '}
 )
 
-
 func (c *Client) Open() {
 	header := http.Header{}
 	header.Add("Authorization", fmt.Sprintf("Bearer %s", c.Token))
