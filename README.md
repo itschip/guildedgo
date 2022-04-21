@@ -11,6 +11,8 @@ go get github.com/itschip/guildedgo
 
 ```go
 func main() {
+    
+    // You might want to download or write your own functionality to get env variables
     token := utils.GoDotEnvVariable("BOT_TOKEN")
     channelId := utils.GoDotEnvVariable("TEST_CHANNEL_ID")
     
