@@ -1,7 +1,13 @@
 # guildedgo
 A guilded.gg library in Go
 
-^ That's it for now
+## Getting started
+
+```cmd
+go get github.com/itschip/guildedgo
+```
+
+### Example
 
 ```go
 func main() {
