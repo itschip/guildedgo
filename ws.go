@@ -42,8 +42,16 @@ func (c *Client) Open() {
 	go c.beat(conn, listening, 22500)
 }
 
-func (c *Client) beat(conn *websocket.Conn, listening <-chan interface{}, interval time.Duration) {
+func (c *Client) beat(conn *websocket.Conn, listener <-chan interface{}, interval time.Duration) {
 	tick := time.NewTicker(interval * time.Millisecond)
+	
+	_, m, err := conn.ReadMessage()
+	if err != nil {
+		log.Fatalln("Failed to read message: ", err.Error())
+	}
+	
+	m = bytes.TrimSpace(bytes.Replace(m, newline, space, -1))
+	fmt.Println(string(m))
 	
 	defer tick.Stop()
 }
