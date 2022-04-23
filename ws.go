@@ -8,6 +8,7 @@ import (
 	"os"
 	"os/signal"
 	"time"
+
 	"github.com/gorilla/websocket"
 )
 
@@ -22,27 +23,27 @@ func (c *Client) Open() {
 
 	interrupt := make(chan os.Signal, 1)
 	signal.Notify(interrupt, os.Interrupt)
-	
+
 	conn, _, err := websocket.DefaultDialer.Dial("wss://api.guilded.gg/v1/websocket", header)
 	if err != nil {
 		log.Fatalln("Failed to connect to websocket: ", err.Error())
 	}
-	
+
 	defer func() {
 		err := conn.Close()
 		if err != nil {
 			log.Fatalln(err.Error())
 		}
 	}()
-	
+
 	_, m, err := conn.ReadMessage()
 	if err != nil {
 		log.Fatalln("Failed to read message: ", err.Error())
 	}
-	
+
 	m = bytes.TrimSpace(bytes.Replace(m, newline, space, -1))
 	fmt.Println(string(m))
-	
+
 	listening := make(chan struct{})
 
 	go func() {
@@ -58,7 +59,6 @@ func (c *Client) Open() {
 			log.Printf("msg: %s", msg)
 		}
 	}()
-
 
 	ticker := time.NewTicker(time.Second)
 	defer ticker.Stop()
