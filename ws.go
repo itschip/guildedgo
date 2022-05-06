@@ -2,6 +2,7 @@ package guildedgo
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -56,7 +57,7 @@ func (c *Client) Open() {
 				return
 			}
 
-			log.Printf("msg: %s", msg)
+			onEvent(msg)
 		}
 	}()
 
@@ -91,4 +92,15 @@ func (c *Client) Open() {
 			return
 		}
 	}
+}
+
+func onEvent(msg []byte) {
+	var chatMessage ChatMessageCreated
+
+	err := json.Unmarshal(msg, &chatMessage)
+	if err != nil {
+		log.Println("Failed to umarshal chat message event")
+	}
+
+	fmt.Print(chatMessage.D.Message.Content)
 }

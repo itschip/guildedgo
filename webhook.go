@@ -10,3 +10,14 @@ type Webhook struct {
 	DeletedAt string `json:"deletedAt"`
 	Token     string `json:"string"`
 }
+
+type ChatMessageCreated struct {
+	OP int                    `json:"op"`
+	T  string                 `json:"t"`
+	D  ChatMessageCreatedData `json:"d"`
+}
+
+type ChatMessageCreatedData struct {
+	ServerID string      `json:"serverId"`
+	Message  ChatMessage `json:"message"`
+}
