@@ -1,8 +1,9 @@
 package guildedgo
 
 import (
+	"fmt"
 	"testing"
-	
+
 	"github.com/itschip/guildedgo/utils"
 )
 
@@ -15,6 +16,12 @@ func TestNewClient(t *testing.T) {
 	}
 
 	c := NewClient(config)
-	
+
+	c.AddEventHander(messageCreate)
+
 	c.Open()
+}
+
+func messageCreate(c *Client, m *ChatMessageCreated) {
+	fmt.Println("Helllo message")
 }
